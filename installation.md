@@ -1,5 +1,13 @@
 # Installation Details
 
+Either method is fine! Both methods assume that Node.js and NPM are installed. Please use Node 22 or above.
+
+## Automatic Installation
+
+Run the _install.bat in the top level.
+
+## Manual Installation
+
 Install the dependencies in the top level folder
 ```bash
 npm i
