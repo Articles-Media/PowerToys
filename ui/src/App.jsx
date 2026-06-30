@@ -3,6 +3,7 @@ import ExtensionsList from './components/ExtensionsList'
 import ContextMenuCommandsInstaller from './components/ContextMenuCommandsInstaller'
 import ConfigEditor from './components/ConfigEditor'
 import { usePowerToysStore } from './hooks/usePowerToysStore'
+import AutoStart from './components/AutoStart'
 
 export default function App() {
     const [content, setContent] = useState('')
@@ -120,6 +121,8 @@ export default function App() {
                         setContextMenuInstalled={setContextMenuInstalled}
                         fetchDetectContextMenu={fetchDetectContextMenu}
                     />
+
+                    <AutoStart />
 
                     <ExtensionsList
                         configObj={configObj}

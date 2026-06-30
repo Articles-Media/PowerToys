@@ -1,8 +1,10 @@
 const express = require('express')
 const fs = require('fs').promises
+const fsSync = require('fs')
 const path = require('path')
 const cors = require('cors')
-const { execSync } = require('child_process')
+const os = require('os');
+const { execSync, execFileSync } = require('child_process')
 
 const app = express()
 app.use(cors())
@@ -33,6 +35,78 @@ function fileToDataUrl(filePath, buffer) {
     return `data:${mime};base64,${buffer.toString('base64')}`
 }
 
+function escapePowerShellSingleQuotes(value) {
+    return value.replace(/'/g, "''")
+}
+
+function createStartupShortcut(shortcutPath, targetFile) {
+    const startupFolder = path.dirname(shortcutPath)
+    fsSync.mkdirSync(startupFolder, { recursive: true })
+
+    const script = [
+        '$WshShell = New-Object -ComObject WScript.Shell',
+        `$Shortcut = $WshShell.CreateShortcut('${escapePowerShellSingleQuotes(shortcutPath)}')`,
+        `$Shortcut.TargetPath = '${escapePowerShellSingleQuotes(targetFile)}'`,
+        `$Shortcut.WorkingDirectory = '${escapePowerShellSingleQuotes(path.dirname(targetFile))}'`,
+        '$Shortcut.Save()'
+    ].join('; ')
+
+    execFileSync('powershell.exe', [
+        '-NoProfile',
+        '-NonInteractive',
+        '-ExecutionPolicy',
+        'Bypass',
+        '-Command',
+        script
+    ], { stdio: 'pipe' })
+}
+
+app.get('/api/detect-startup', (req, res) => {
+
+    const shortcutName = 'Articles Media PowerToys.lnk';
+    const startupFolder = path.join(os.homedir(), 'AppData', 'Roaming', 'Microsoft', 'Windows', 'Start Menu', 'Programs', 'Startup');
+
+    const shortcutPath = path.join(startupFolder, shortcutName);
+
+    // Check if the shortcut exists
+    const isEnabled = fsSync.existsSync(shortcutPath);
+
+    res.json({
+        enabled: isEnabled,
+        message: isEnabled ? 'Startup is currently enabled.' : 'Startup is currently disabled.'
+    });
+
+});
+
+app.post('/api/toggle-startup', async (req, res) => {
+
+    console.log("/api/toggle-startup");
+
+    const targetFile = path.resolve(__dirname, '..', '_install.bat'); // Path to your target file
+    const shortcutName = 'Articles Media PowerToys.lnk';
+    const startupFolder = path.join(os.homedir(), 'AppData', 'Roaming', 'Microsoft', 'Windows', 'Start Menu', 'Programs', 'Startup');
+    const shortcutPath = path.join(startupFolder, shortcutName);
+
+    try {
+        if (fsSync.existsSync(shortcutPath)) {
+            fsSync.unlinkSync(shortcutPath);
+            res.json({ message: 'Startup disabled (shortcut removed).', enabled: false });
+        } else {
+            createStartupShortcut(shortcutPath, targetFile);
+
+            if (!fsSync.existsSync(shortcutPath)) {
+                throw new Error(`Shortcut was not created at ${shortcutPath}`);
+            }
+
+            res.json({ message: 'Startup enabled (shortcut created).', enabled: true });
+        }
+    } catch (error) {
+        console.error('Error toggling startup:', error);
+        res.status(500).json({ message: 'Failed to toggle startup.', error: error.message });
+    }
+
+})
+
 app.post('/api/install-context-menu', async (req, res) => {
 
     // console.log(
@@ -42,7 +116,7 @@ app.post('/api/install-context-menu', async (req, res) => {
 
     // console.log("req.body", req.body)
 
-    const { 
+    const {
         enabledExtensions,
         extensions
     } = req.body;
@@ -132,13 +206,13 @@ app.get('/api/extensions', async (req, res) => {
                 imageDataUrl = null
             }
 
-            result.push({ 
-                name: ent.name, 
+            result.push({
+                name: ent.name,
                 config: cfg,
                 extensionPath: extDir,
-                image, 
-                imageUrl, 
-                imageDataUrl 
+                image,
+                imageUrl,
+                imageDataUrl
             })
         }
 
