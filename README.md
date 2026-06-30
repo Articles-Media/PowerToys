@@ -15,7 +15,7 @@
   <span> · </span>
   <a href="./extensions_guide.md">Documentation</a>
   <span> · </span>
-  <a href="https://github.com/Articles-Media/articles-PowerToys/releases">Release notes</a>
+  <a href="https://github.com/Articles-Media/PowerToys/releases">Release notes</a>
 </h3>
 
 ## 🔨 Utilities
@@ -44,7 +44,7 @@ Articles Media PowerToys includes no useful built in utilities, add more by inst
 
 ## 📦 Installation
 
-For detailed installation instructions and system requirements, visit the [installation docs](https://github.com/Articles-Media/articles-PowerToys).
+For detailed installation instructions and system requirements, visit the [installation docs](./installation.md).
 
 ## 🛣️ Roadmap
 

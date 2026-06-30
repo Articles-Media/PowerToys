@@ -20,3 +20,5 @@ Now you should be able to start the dev server in the ui folder to interact with
 ```bash
 npm run dev
 ```
+
+Articles Blender Extension Note: Make sure your config.json points to correct blender path. Make sure bpy is installed, see https://pypi.org/project/bpy/. Eventually setup will be automated.
