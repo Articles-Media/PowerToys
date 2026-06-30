@@ -1,13 +1,44 @@
 import path from 'path';
 import { execFileSync } from 'child_process';
 import process from 'process';
-import { fileURLToPath } from 'url';
+import { fileURLToPath, pathToFileURL } from 'url';
 import { dirname } from 'path';
 import readline from 'readline';
 import fs from 'fs';
-import config from './config.js';
+
+function findConfigPath(startDir) {
+  let currentDir = path.resolve(startDir);
+
+  while (true) {
+    const dirName = path.basename(currentDir);
+    if (dirName === 'extensions') {
+      const parentConfigPath = path.join(path.dirname(currentDir), 'config.js');
+      if (fs.existsSync(parentConfigPath)) {
+        return parentConfigPath;
+      }
+    }
+
+    const candidateConfigPath = path.join(currentDir, 'config.js');
+    if (fs.existsSync(candidateConfigPath)) {
+      return candidateConfigPath;
+    }
+
+    const parentDir = path.dirname(currentDir);
+    if (parentDir === currentDir) {
+      throw new Error('Could not find config.js above the extensions folder.');
+    }
+
+    currentDir = parentDir;
+  }
+}
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+const configPath = findConfigPath(__dirname);
+const config = (await import(pathToFileURL(configPath).href)).default;
 
 const inputFile = process.argv[2];
+
 const cliMode = process.argv.includes('-cli') || process.argv.includes('--cli');
 
 if (!inputFile) {
@@ -17,8 +48,8 @@ if (!inputFile) {
 
 const inputFileDetails = path.parse(inputFile);
 const fileDetails = path.parse(inputFile);
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+// const __filename = fileURLToPath(import.meta.url);
+// const __dirname = dirname(__filename);
 
 console.log('File path:', __filename);
 console.log('Directory path:', __dirname);

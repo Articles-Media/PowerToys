@@ -4,5 +4,26 @@
     "version": "0.0.1",
     "extension_version": "0.0.1",
     "author": "Articles Media",
-    "license": "MIT"
+    "license": "MIT",
+    "commands": [
+        {
+            "command": "generate_model_thumbnail.js",
+            "title": "Generate Model Thumbnail",
+            "file_extensions": [
+                "glb",
+                "gltf",
+                "blend"
+            ]
+        },
+        {
+            "command": "generate_model_thumbnail.js",
+            "title": "Generate Model Thumbnail CLI",
+            "appendCliToCommand": true,
+            "file_extensions": [
+                "glb",
+                "gltf",
+                "blend"
+            ]
+        }
+    ]
 }

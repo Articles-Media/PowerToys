@@ -33,16 +33,36 @@ function fileToDataUrl(filePath, buffer) {
     return `data:${mime};base64,${buffer.toString('base64')}`
 }
 
-app.get('/api/install-context-menu', async (req, res) => {
+app.post('/api/install-context-menu', async (req, res) => {
 
     // console.log(
     //     "install-context-menu",
     //     `${contextMenuPath}`
     // )
 
+    // console.log("req.body", req.body)
+
+    const { 
+        enabledExtensions,
+        extensions
+    } = req.body;
+
+    console.log("API level enabledExtensions", enabledExtensions)
+    console.log("API level extensions", extensions)
+
+    // execSync(`node install.js --enabledExtensions=${JSON.stringify(enabledExtensions)}`, {
+    //     cwd: contextMenuPath,
+    //     stdio: 'inherit'
+    // });
+
     execSync(`node install.js`, {
         cwd: contextMenuPath,
-        stdio: 'inherit'
+        stdio: 'inherit',
+        env: {
+            ...process.env,
+            ENABLED_EXTENSIONS: JSON.stringify(enabledExtensions),
+            EXTENSIONS: JSON.stringify(extensions)
+        }
     });
 
     res.json({
@@ -112,7 +132,14 @@ app.get('/api/extensions', async (req, res) => {
                 imageDataUrl = null
             }
 
-            result.push({ name: ent.name, config: cfg, image, imageUrl, imageDataUrl })
+            result.push({ 
+                name: ent.name, 
+                config: cfg,
+                extensionPath: extDir,
+                image, 
+                imageUrl, 
+                imageDataUrl 
+            })
         }
 
         res.json({ extensions: result })

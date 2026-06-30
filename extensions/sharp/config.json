@@ -1,8 +1,19 @@
 {
     "name": "Articles Sharp",
-    "description": "Adds a few commands to the context menu for quickly creating thumbnails from .blend, .glb, and .gltf files. More coming soon!",
+    "description": "Adds sharp commands to the context menu for image file conversions.",
     "version": "0.0.1",
     "extension_version": "0.0.1",
     "author": "Articles Media",
-    "license": "MIT"
+    "license": "MIT",
+    "commands": [
+        {
+            "command": "convert_image.js",
+            "title": "Convert to WebP",
+            "file_extensions": [
+                "png",
+                "jpg",
+                "jpeg"
+            ]
+        }
+    ]
 }

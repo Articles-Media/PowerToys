@@ -1,8 +1,24 @@
 {
     "name": "Articles Gltfjsx",
-    "description": "Adds a few commands to the context menu for quickly creating thumbnails from .blend, .glb, and .gltf files. More coming soon!",
+    "description": "Adds context menu options to quickly run gltxjsx commands on .glb files.",
     "version": "0.0.1",
     "extension_version": "0.0.1",
     "author": "Articles Media",
-    "license": "MIT"
+    "license": "MIT",
+    "commands": [
+        {
+            "command": "transform_gltfjsx.js",
+            "title": "GLTFJSX Transform",
+            "file_extensions": [
+                "glb"
+            ]
+        },
+        {
+            "command": "transform_gltfjsx_cli.js",
+            "title": "GLTFJSX Transform CLI",
+            "file_extensions": [
+                "glb"
+            ]
+        }
+    ]
 }
