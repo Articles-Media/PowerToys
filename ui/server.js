@@ -4,7 +4,7 @@ const fsSync = require('fs')
 const path = require('path')
 const cors = require('cors')
 const os = require('os');
-const { execSync, execFileSync } = require('child_process')
+const { execSync, execFileSync, exec } = require('child_process')
 
 const app = express()
 app.use(cors())
@@ -60,6 +60,21 @@ function createStartupShortcut(shortcutPath, targetFile) {
         script
     ], { stdio: 'pipe' })
 }
+
+app.post('/api/open-startup', (req, res) => {
+    console.log("/api/open-startup");
+
+    const startupFolder = path.join(os.homedir(), 'AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\Startup');
+
+    // The 'start' command in Windows opens a folder in File Explorer
+    exec(`start "" "${startupFolder}"`, (error) => {
+        if (error) {
+            console.error('Error opening startup folder:', error);
+            return res.status(500).json({ message: 'Failed to open startup folder.', error: error.message });
+        }
+        res.json({ message: 'Startup folder opened successfully.' });
+    });
+});
 
 app.get('/api/detect-startup', (req, res) => {
 

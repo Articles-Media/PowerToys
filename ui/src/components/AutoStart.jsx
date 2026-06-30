@@ -46,6 +46,17 @@ export default function AutoStart({
 
     }
 
+    function openStartup(startup) {
+        fetch('/api/open-startup', { method: 'POST' })
+            .then((r) => r.json())
+            .then((data) => {
+                console.log(data)
+            })
+            .catch((e) => {
+                alert('Uninstallation failed: ' + e.message)
+            })
+    }
+
     const enabledCheck = useRef()
     const [enabled, setEnabled] = useState(false)
 
@@ -67,9 +78,14 @@ export default function AutoStart({
 
             <p
                 onClick={() => {
-
+                    openStartup()
+                }}
+                style={{
+                    textDecoration: 'underline',
+                    cursor: 'pointer'
                 }}
             >
+                📂
                 {enabled ?
                     <strong>Detected Installation!</strong>
                     :
