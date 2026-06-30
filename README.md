@@ -41,6 +41,21 @@ Articles Media PowerToys includes no useful built in utilities, add more by inst
   <span>Transform glb and gltf to react-three-fiber ready files just by shift right clicking a model! Uses the NPM gltfjsx package!</span>
 </details>
 
+## 📦 Preview Photos
+
+Not much at the moment
+
+![Preview](./images/readme/preview.webp)
+UI Landing Page
+
+![Convert Image Preview](./images/readme/convert-image-example.webp)
+Articles Sharp extension commands.
+
+![Command Line Questions Preview](./images/readme/cmd-rl-example.webp)
+Further customization via command line questions.
+
+![Multiple Commands Preview](./images/readme/3d-model-commands.webp)
+Articles Blender & GLTFJSX extensions adding commands for 3D models.
 
 ## 📦 Installation
 
