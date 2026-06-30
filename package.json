@@ -1,0 +1,9 @@
+{
+  "name": "articles-PowerToys",
+  "description": "Similar to Microsoft PowerToys, Articles Media Power Toys is a piece of software that allows easy creation and management of added Windows features and utilities.",
+  "version": "0.0.1",
+  "type": "module",
+  "dependencies": {
+    "sharp": "^0.35.2"
+  }
+}

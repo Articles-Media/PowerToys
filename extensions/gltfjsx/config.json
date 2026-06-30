@@ -1,0 +1,8 @@
+{
+    "name": "Articles Gltfjsx",
+    "description": "Adds a few commands to the context menu for quickly creating thumbnails from .blend, .glb, and .gltf files. More coming soon!",
+    "version": "0.0.1",
+    "extension_version": "0.0.1",
+    "author": "Articles Media",
+    "license": "MIT"
+}
