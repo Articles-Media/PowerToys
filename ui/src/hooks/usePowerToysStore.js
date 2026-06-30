@@ -8,9 +8,12 @@ export const usePowerToysStore = create()(
         extensions: [],
         setExtensions: (extensions) => set({ extensions }),
 
+        contextMenuInstalledExtensionsString: "",
+        setContextMenuInstalledExtensionsString: (contextMenuInstalledExtensionsString) => set({ contextMenuInstalledExtensionsString }),
+
         enabledExtensions: [],
         setEnabledExtensions: (extensions) => set({ enabledExtensions }),
-        toggleExtensionEnabled: (extensionName) => {
+        toggleExtensionEnabled: (extension, extensionName) => {
 
             console.log('toggleExtensionEnabled', extensionName)
 
@@ -34,6 +37,9 @@ export const usePowerToysStore = create()(
                     ...extensions, 
                     { 
                         name: extensionName, 
+                        id: extensionName, 
+                        author: extension?.config?.author ?? 'Unknown',
+                        version: extension?.config?.version ?? '0.0.0',
                         // extension_path: extension_path,
                         enabled: true 
                     }
@@ -41,13 +47,15 @@ export const usePowerToysStore = create()(
             }
 
             console.log('new enabledExtensions', updatedExtensions)
-            set({ enabledExtensions: updatedExtensions })
+            set({ 
+              enabledExtensions: updatedExtensions,
+            })
         },
 
     }),
     {
       name: 'articles-media-power-toys-store',
-      version: 1,
+      version: 2,
       partialize: (state) =>
         Object.fromEntries(
           Object.entries(state).filter(([key]) => ![

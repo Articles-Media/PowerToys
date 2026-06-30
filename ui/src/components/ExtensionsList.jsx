@@ -33,13 +33,22 @@ export default function ExtensionsList({
                         }}
                     >
                         <h2 style={{ marginBottom: 0 }}>Extensions</h2>
-                        <button
-                            onClick={() =>
-                                fetchExtensions()
-                            }
-                        >
-                            Refresh
-                        </button>
+                        <div>
+                            <button
+                                onClick={() => {
+                                    
+                                }}
+                            >
+                                Add Custom
+                            </button>
+                            <button
+                                onClick={() =>
+                                    fetchExtensions()
+                                }
+                            >
+                                Refresh
+                            </button>
+                        </div>
                     </div>
 
                     <div
@@ -173,7 +182,7 @@ export default function ExtensionsList({
                                         <div>
                                             <button
                                                 onClick={() =>
-                                                    usePowerToysStore.getState().toggleExtensionEnabled(extensionId)
+                                                    usePowerToysStore.getState().toggleExtensionEnabled(extension, extensionId)
                                                 }
                                                 style={{
                                                     minWidth: 80,

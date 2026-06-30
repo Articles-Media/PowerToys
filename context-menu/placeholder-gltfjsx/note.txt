@@ -1,0 +1,1 @@
+Super simple code that just adds the gltfjsx right click logic, I want to see if main repo would want to add this via PR.

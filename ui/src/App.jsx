@@ -16,6 +16,7 @@ export default function App() {
     // const [extensions, setExtensions] = useState([])
     const extensions = usePowerToysStore((state) => state.extensions)
     const setExtensions = usePowerToysStore((state) => state.setExtensions)
+    const setContextMenuInstalledExtensionsKey = usePowerToysStore((state) => state.setContextMenuInstalledExtensionsKey)
 
     useEffect(() => {
 
@@ -88,6 +89,11 @@ export default function App() {
                     if (!prev) return prev
                     return { ...prev, [key]: { ...prev[key], enabled: value } }
                 })
+
+                // setContextMenuInstalledExtensionsKey(
+
+                // )
+
                 // reload content
                 const r = await fetch('/api/config')
                 const d = await r.json()
