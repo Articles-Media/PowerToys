@@ -124,9 +124,9 @@ function dynamicGeneratedCommands() {
 
 const commands = [
   // Base Menu
-  `reg add "${fileMenuPath}" /v "MUIVerb" /t REG_SZ /d "Articles Media" /f`,
+  `reg add "${fileMenuPath}" /v "MUIVerb" /t REG_SZ /d "Articles Media PowerToys" /f`,
   `reg add "${fileMenuPath}" /v "Icon" /t REG_SZ /d "${iconPath}" /f`,
-  `reg add "${fileMenuPath}" /v "Extended" /t REG_SZ /d "" /f`, // Requires Shift-Click
+  // `reg add "${fileMenuPath}" /v "Extended" /t REG_SZ /d "" /f`, // Require Shift-Click to show
   `reg add "${fileMenuPath}" /v "subcommands" /t REG_SZ /d "" /f`,
 
   // Run Script

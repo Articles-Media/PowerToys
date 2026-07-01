@@ -7,12 +7,23 @@
     "license": "MIT",
     "commands": [
         {
-            "command": "convert_image.js",
+            "command": "convert_to_webp.js",
             "title": "Convert to WebP",
             "file_extensions": [
                 "png",
                 "jpg",
                 "jpeg"
+            ]
+        },
+        {
+            "command": "convert_image.js",
+            "title": "Convert Image",
+            "file_extensions": [
+                "png",
+                "jpg",
+                "jpeg",
+                "webp",
+                "ico"
             ]
         }
     ]

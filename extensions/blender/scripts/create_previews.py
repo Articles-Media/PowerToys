@@ -37,6 +37,7 @@ def parse_args(argv):
     input_path = None
     output_folder = None
     rotation_degrees = 0.0
+    append_rotation_to_name = False
     index = 0
 
     while index < len(argv):
@@ -51,6 +52,9 @@ def parse_args(argv):
         elif arg in ('--rotation', '-r') and index + 1 < len(argv):
             rotation_degrees = float(argv[index + 1])
             index += 2
+        elif arg == '--append-rotation-to-name' and index + 1 < len(argv):
+            append_rotation_to_name = argv[index + 1].lower() in ('1', 'true', 'yes', 'y')
+            index += 2
         elif input_path is None:
             input_path = arg
             index += 1
@@ -60,7 +64,7 @@ def parse_args(argv):
         else:
             index += 1
 
-    return input_path, output_folder, rotation_degrees
+    return input_path, output_folder, rotation_degrees, append_rotation_to_name
 
 
 def main():
@@ -68,10 +72,10 @@ def main():
         # Log all command-line arguments for debugging
         print(f"Command-line arguments: {sys.argv}")
 
-        input_path, output_folder, rotation_degrees = parse_args(sys.argv[1:])
+        input_path, output_folder, rotation_degrees, append_rotation_to_name = parse_args(sys.argv[1:])
 
         if not input_path or not output_folder:
-            print("Usage: blender --background --python <script> -- <input_path> <output_folder> [--rotation <degrees>]")
+            print("Usage: blender --background --python <script> -- <input_path> <output_folder> [--rotation <degrees>] [--append-rotation-to-name <true|false>]")
             return
 
         # Accept either a single file or a folder of files
@@ -90,7 +94,13 @@ def main():
         for input_file_path in input_files:
             filename = os.path.basename(input_file_path)
             output_file_path = os.path.join(output_folder, filename.replace(".blend", ".glb").replace(".glb", "_processed.glb"))
-            preview_image_path = os.path.join(output_folder, filename.replace(".blend", ".png").replace(".glb", ".png"))
+            preview_filename = filename.replace(".blend", ".png").replace(".glb", ".png")
+
+            if append_rotation_to_name and rotation_degrees:
+                rotation_suffix = f"-{int(rotation_degrees)}"
+                preview_filename = os.path.splitext(preview_filename)[0] + rotation_suffix + os.path.splitext(preview_filename)[1]
+
+            preview_image_path = os.path.join(output_folder, preview_filename)
 
             print(f"Processing file: {filename}")
 

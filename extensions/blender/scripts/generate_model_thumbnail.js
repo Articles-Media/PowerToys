@@ -56,10 +56,32 @@ console.log('Directory path:', __dirname);
 console.log('inputFile', inputFile);
 
 const blenderPath = config.blender.blenderPath;
-const outputDir = path.join(inputFileDetails.dir, '_glb_thumbnails');
+let outputDir = inputFileDetails.dir;
+let appendRotationToName = false;
 
-if (!fs.existsSync(outputDir)) {
-  fs.mkdirSync(outputDir, { recursive: true });
+function askForOutputFolderName() {
+  return new Promise((resolve) => {
+    const rl = readline.createInterface({
+      input: process.stdin,
+      output: process.stdout
+    });
+
+    rl.question('Enter output folder name [Press Enter for default same location as file]: ', (answer) => {
+      rl.close();
+      const trimmed = answer.trim();
+
+      if (!trimmed || trimmed === '.') {
+        resolve(inputFileDetails.dir);
+        return;
+      }
+
+      if (path.isAbsolute(trimmed)) {
+        resolve(trimmed);
+      } else {
+        resolve(path.join(inputFileDetails.dir, trimmed));
+      }
+    });
+  });
 }
 
 function askForRotation() {
@@ -82,12 +104,34 @@ function askForRotation() {
   });
 }
 
+function askForAppendRotationName() {
+  return new Promise((resolve) => {
+    const rl = readline.createInterface({
+      input: process.stdin,
+      output: process.stdout
+    });
+
+    rl.question('Append rotation value to final image name? (y/N): ', (answer) => {
+      rl.close();
+      const normalized = answer.trim().toLowerCase();
+      resolve(normalized === 'y' || normalized === 'yes');
+    });
+  });
+}
+
 async function main() {
   let rotationDegrees = 0;
 
   if (cliMode) {
+    outputDir = await askForOutputFolderName();
     rotationDegrees = await askForRotation();
+    appendRotationToName = await askForAppendRotationName();
     console.log(`Using model rotation: ${rotationDegrees} degrees`);
+    console.log(`Append rotation to image name: ${appendRotationToName ? 'yes' : 'no'}`);
+  }
+
+  if (!fs.existsSync(outputDir)) {
+    fs.mkdirSync(outputDir, { recursive: true });
   }
 
   try {
@@ -101,6 +145,7 @@ async function main() {
 
     if (cliMode) {
       args.push('--rotation', String(rotationDegrees));
+      args.push('--append-rotation-to-name', String(appendRotationToName));
     }
 
     execFileSync(blenderPath, args, {
